@@ -23,3 +23,5 @@ Suggests:
 Config/testthat/edition: 3
 Depends: 
     edibble
+URL: https://github.com/emitanaka/souschef
+BugReports: https://github.com/emitanaka/souschef/issues
