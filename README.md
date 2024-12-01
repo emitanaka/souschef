@@ -39,36 +39,38 @@ experiment with some made up context.
 ``` r
 some_experiment <- takeauto()
 #> → No name was supplied so selecting a random named experimental design...
-#> → Selected Strip-Plot Design, Strip-Unit Design
+#> → Selected Completely Randomised Design
 some_experiment
-#> design("Soil Fertility") %>%
-#>   set_units(Farmer.John = 7,
-#>             Treatment.A = nested_in(Farmer.John, 10),
-#>             Location.X = nested_in(Farmer.John, 3),
-#>             Plot = nested_in(Farmer.John, crossed_by(Treatment.A, Location.X))) %>%
-#>   set_trts(NPK.Fert = 10,
-#>            Organic.Manure = 3) %>%
-#>   allot_trts(NPK.Fert ~ Treatment.A,
-#>              Organic.Manure ~ Location.X) %>%
-#>   assign_trts("random", seed = 454) %>%
+#> design("Fertilizer Effect") %>%
+#>   set_units(Plot = 18) %>%
+#>   set_trts(Fertilizer.Effect = 2) %>%
+#>   allot_trts(Fertilizer.Effect ~ Plot) %>%
+#>   assign_trts("random", seed = 215) %>%
 #>   serve_table() 
 #> 
-#> # Soil Fertility 
-#> # An edibble: 210 x 6
-#>     Farmer.John   Treatment.A   Location.X     Plot   NPK.Fert  Organic.Manure
-#>  *       <U(7)>       <U(70)>      <U(21)> <U(210)>    <T(10)>          <T(3)>
-#>           <chr>         <chr>        <chr>    <chr>      <chr>           <chr>
-#>  1 Farmer.John1 Treatment.A01 Location.X01  Plot001 NPK.Fert10 Organic.Manure3
-#>  2 Farmer.John1 Treatment.A02 Location.X01  Plot002 NPK.Fert04 Organic.Manure3
-#>  3 Farmer.John1 Treatment.A03 Location.X01  Plot003 NPK.Fert05 Organic.Manure3
-#>  4 Farmer.John1 Treatment.A04 Location.X01  Plot004 NPK.Fert08 Organic.Manure3
-#>  5 Farmer.John1 Treatment.A05 Location.X01  Plot005 NPK.Fert06 Organic.Manure3
-#>  6 Farmer.John1 Treatment.A06 Location.X01  Plot006 NPK.Fert01 Organic.Manure3
-#>  7 Farmer.John1 Treatment.A07 Location.X01  Plot007 NPK.Fert07 Organic.Manure3
-#>  8 Farmer.John1 Treatment.A08 Location.X01  Plot008 NPK.Fert03 Organic.Manure3
-#>  9 Farmer.John1 Treatment.A09 Location.X01  Plot009 NPK.Fert09 Organic.Manure3
-#> 10 Farmer.John1 Treatment.A10 Location.X01  Plot010 NPK.Fert02 Organic.Manure3
-#> # ℹ 200 more rows
+#> # Fertilizer Effect 
+#> # An edibble: 18 x 2
+#>       Plot  Fertilizer.Effect
+#>  * <U(18)>             <T(2)>
+#>      <chr>              <chr>
+#>  1  Plot01 Fertilizer.Effect2
+#>  2  Plot02 Fertilizer.Effect2
+#>  3  Plot03 Fertilizer.Effect1
+#>  4  Plot04 Fertilizer.Effect1
+#>  5  Plot05 Fertilizer.Effect1
+#>  6  Plot06 Fertilizer.Effect1
+#>  7  Plot07 Fertilizer.Effect1
+#>  8  Plot08 Fertilizer.Effect2
+#>  9  Plot09 Fertilizer.Effect2
+#> 10  Plot10 Fertilizer.Effect2
+#> 11  Plot11 Fertilizer.Effect1
+#> 12  Plot12 Fertilizer.Effect2
+#> 13  Plot13 Fertilizer.Effect1
+#> 14  Plot14 Fertilizer.Effect2
+#> 15  Plot15 Fertilizer.Effect1
+#> 16  Plot16 Fertilizer.Effect1
+#> 17  Plot17 Fertilizer.Effect2
+#> 18  Plot18 Fertilizer.Effect2
 ```
 
 Describe the context in words. The output here is just a simple direct
@@ -76,96 +78,97 @@ translation from the given edibble object.
 
 ``` r
 describe_context(some_experiment)
-#> Title: Soil Fertility
-#> Units: Farmer.John, Treatment.A, Location.X, Plot
-#> Treatments: NPK.Fert, Organic.Manure
-#> Mappings: Farmer.John is nested in Treatment.A, Farmer.John is nested in Location.X, Farmer.John is nested in Plot, Treatment.A is related to Plot, Location.X is related to Plot, NPK.Fert is assigned to Treatment.A, Organic.Manure is assigned to Location.X
+#> Title: Fertilizer Effect
+#> Units: Plot
+#> Treatments: Fertilizer.Effect
+#> Mappings: Fertilizer.Effect is assigned to Plot
 ```
 
 We can expand the context more eloquently with a LLM.
 
 ``` r
 describe_scenario(some_experiment)
-#> Based on the structure of the experiment, here's a description:
+#> This appears to be a description of an agricultural or gardening type experiment.
 #> 
-#> **Soil Fertility Experiment**
+#> The experiment seems to be investigating the effect of different fertilizers on plant growth, presumably in plots. The treatments (factors being tested) are the various types of fertilizers, and each plot receives a specific fertilizer treatment. 
 #> 
-#> This experimental design aims to investigate the effect of two soil fertility treatments on crop growth. The experiment involves multiple levels of nesting and relationships between different factors.
+#> Here's how I would describe the experiment:
 #> 
-#> **Layers of Nesting:**
+#> **Purpose:** This experiment aims to compare and contrast the effects of different fertilizers on plant growth and development in controlled plots.
 #> 
-#> 1. **Farmer**: Farmer.John is at the top level, indicating that the experiment is conducted by a single farmer (Farmer.John).
-#> 2. **Treatment**: Treatment.A is nested within Farmer.John, suggesting two fertility treatments are being tested (NPK.Fert and Organic.Manure).
-#> 3. **Location**: Location.X is also nested within each treatment (Treatment.A), implying multiple locations or plots where the treatments are applied.
-#> 4. **Plot**: Each location (Location.X) contains multiple plots where the experiments are conducted.
+#> **Methodology:**
 #> 
-#> **Relationships:**
+#> 1. Various plots are designated for use.
+#> 2. Each plot is assigned a different type of fertilizer, representing multiple fertilizer treatments (e.g., regular fertilizer, organic fertilizer, etc.).
 #> 
-#> * Treatment.A is related to Plot, meaning each plot receives one of the two treatments (NPK.Fert or Organic.Manure).
-#> * Location.X is related to Plot, indicating that each location has multiple plots for the experiment.
-#> * NPK.Fert and Organic.Manure are assigned to Treatment.A and Location.X, respectively, showing which treatment is applied in each case.
+#> 3. The experiment likely observes key variables such as:
+#>    - Growth parameters (e.g., height, leaf area index, etc.)  
+#>    - Yield (measured in quantity and quality) 
+#>    - Visual inspection to identify effects on foliage color, texture, disease prevalence and overall vigor.
 #> 
-#> In summary, this design measures the effect of two soil fertility treatments (NPK.Fert and Organic.Manure) across multiple locations and plots, all conducted by the same farmer (Farmer.John). The experiment aims to compare the outcomes of these different treatment approaches on soil fertility.
+#> **Primary Research Question:**
+#> 
+#> - How does different fertilizers impact plant growth outcomes?
 ```
 
 We can ask our LLM assistant for ideas about the experimental design.
 
 ``` r
 ideate_design(some_experiment)
-#> Based on the previous context, here are some suggestions for improving the experimental design:
+#> Based on the provided information, here are some suggested improvements to the experimental design:
 #> 
-#> 1. **Replication:** The current design has only one replication of each treatment within Location.X and Plot. Consider adding multiple replications (e.g., 4-6) per treatment group to increase statistical power and account for variability.
+#> 1. **Replication**: Each treatment should be replicated multiple times (e.g., 3-5 replicates) across different plots. This ensures that any observed differences are not due to chance or a specific plot characteristic but rather the effect of the fertilizer.
 #> 
-#> 2. **Randomization:** Make sure that plots and locations were randomly assigned to treatments, rather than the treatments being applied to specific areas or based on farmer's judgment. This is critical in minimizing bias and ensuring generalizability of results.
+#> 2. **Control Group**: Including a control group receiving no fertilization would serve as a baseline for comparisons, making it easier to assess the actual impact of each fertilizer type over just varying levels of some application (fertilizer).
 #> 
-#> 3. **Blocking:** If possible, block plots by factors like soil type, terrain slope, or vegetation cover. This can help reduce variability among plots due to non-treatment effects. Alternatively, consider splitting plots into smaller subplots (sub-locations) for more precise treatment application.
+#> 3. **Multiple Application Rates or Timing**: If the goal is to understand optimal use, consider varying the rate at which different fertilizers are applied across plots. This could help in pinpointing whether there's an ideal concentration for maximum yield. 
 #> 
-#> 4. **Additional Factors:** Incorporate other factors that might influence soil fertility, such as:
-#>  * Timing of fertilizer/organic manure application
-#>  * Doses/formulations of NPK.Fert and Organic.Manure
-#>  * Pre-treatment characterization of soil properties (e.g., texture, pH)
-#>  * Environmental conditions during sampling (weather patterns, temperature)
+#> 4. **Randomization**: While it seems like plots were assigned treatments randomly ("Mappings: Fertilizer.Effect is assigned to Plot"), explicitly stating this within the experimental design section can help ensure that future studies adhere to similar protocols.
 #> 
-#> 5. **Sampling Strategy:** Instead of relying solely on Farmer.John for collecting samples, design the experiment to accommodate multiple observers or samplers. This adds robustness and redundancy in data collection.
+#> 5. **Sampling Strategy**: For measurements or outcome analysis, consider a balanced incomplete block (BIB) design where each fertilizer type is represented across multiple plots with varying complements of treatments, helping to eliminate bias due to plot-specific factors.
 #> 
-#> 6. **Consider using a Split-Plot Design:**
-#> If Treatment.A is really related to Plot at different locations within them (due to experimental requirements), but also to Location.X directly, it might simplify things if the treatment were truly a matter of how each was handled rather than an inherent trait.
-#> With some data and research this might be the case.
+#> 6. **Measure Outcomes Directly Relevant to Fertilizer Use**: Instead of assuming plant yield as the primary metric, directly measure effects or consider outcomes such as soil pH change, nutrient uptake rates by plants, microbial communities, and other indicators directly linked to fertilizer impact.
+#> 
+#> 7. **Long-Term Observations**: Incorporate provisions for observing these plots over prolonged periods. Fertilizer efficacy can vary significantly depending on growth stages, especially considering delayed effectiveness in some soil conditions.
+#> 
+#> 8. **Controlling Other Variables**: Identify and control factors like climate variations (precipitation), sunlight exposure levels (microclimates within the larger field or greenhouse settings), as such parameters would directly impact plant growth response to different fertilizers.
+#> 
+#> 9. **Multiple Data Collectors**: Have multiple individuals, blinded to treatment types where appropriate, collect data to rule out measurement errors potentially biasing results towards an expected outcome.
+#> 
+#> Adopting these measures can enhance the experimental design's sensitivity and provide insights that are not as significantly influenced by random chance or other irrelevant variables.
 ```
 
 Or more broadly about ideas for the experiment.
 
 ``` r
 ideate_experiment(some_experiment)
-#> Based on the experiment structure described, here are some suggestions for improvement:
+#> Based on the provided structure and description of the "Fertilizer Effect" experiment, here are some suggestions for improvement:
 #> 
-#> 1. **Adding Replication:**
-#>    - Each level of factor (farmer, treatment, location) lacks replication in the given context, which could introduce bias and limit the generalizability of findings. Including multiple replicates at each level would strengthen the experimental design.
-#>    
-#> 2. **Including a Control Group:**
-#>    - Presently, treatments are being compared without a control group (plots to which neither treatment is applied). A control with no fertilizer added can serve as a baseline against which the two types of fertilizers can be compared, enhancing comprehension and relevance of results.
+#> 1. **Add a Control Group**:
+#>    Include an untreated control plot or plot(s) that receive no fertilizer application as a baseline comparison. This would allow researchers to understand the natural variability within the system and provide a standard against which the effects of fertilizers can be compared.
 #> 
-#> 3. **Randomization:**
-#>    - Consider randomizing each plot allocation across different factors (e.g., treatments between plots within the same farmer) to ensure that any observed differences are due to the treatment rather than systematic variations between factors.
+#> 2. **Increase Numerosity and Replication**:
+#>    Conducting the experiment on more than one unit (i.e., having multiple plots) and replicating the study in different environmental conditions, if possible, could enhance the reliability of the results by accounting for any uncontrolled variables such as seasonal changes or unique soil characteristics.
 #> 
-#> 4. **Monitoring Additional Variables:**
-#>    - To better understand the effects of each fertilizer type, consider collecting data on additional variables such as crop yield, water consumption by plants, pest/disease prevalence, and environmental metrics (e.g., soil pH, biodiversity).
+#> 3. **Consider Additional Factors**:
+#>    In addition to fertilizer type, consider studying other factors that might influence the outcome, such as timing of application (pre-planting vs. at planting), dose (quantity of fertilizer used), and crop variety/age when comparing different fertilization methods.
 #> 
-#> 5. **Slighting Factors for Comparison Within Treatments (Sub-Treatments):**
-#>    - It might be useful to include a second level of factorial design within NPK.Fert and Organic.Manure treatments where factors are introduced that could potentially influence outcomes from these main treatments. For instance:
-#>      - For NPK.Fert: Compare standard concentrations vs high concentration or different fertilizer-to-water ratios.
-#>      - For Organic.Manure: Test manure quantity vs manure quality as variables influencing plot outcomes.
+#> 4. **Precise Definitions of Treatments**:
+#>    Elaborate on what is meant by "Fertilizer.Effect". For example, are treatments for specific nutrients lacking in the soil (e.g., nitrogen, phosphorus), types of fertilizers (organic vs. synthetic), application rates, or the timing of these applications being compared?
 #> 
-#> 6. **Location Variability (Soil Type, Etc.) Assessment:**
-#>    - If Location (Site) is truly a controlling variable for Plot outcomes as per the design, exploring characteristics at each location independently (soils type, existing conditions, and their implications on crops) might help refine recommendations within broader insights.
+#> 5. **Statistical Analysis and Data Collection**:
+#>    Ensure that a systematic approach is taken to collecting data throughout the experiment. Implement randomization and proper controls for confounding variables across treatment groups. Consider employing advanced statistical methods like MANOVA (Multivariate Analysis of Variance) or regression analysis, if appropriate for the design.
 #> 
-#> 7. **Consideration of Temporal Variability:**
-#>    - Given that soil fertility and responses from different fertilizers could shift over time, planning for at least yearly or two-year follow-up assessments is recommended to monitor sustainability and progression in outcomes as plots evolve under treatment conditions.
+#> 6. **Measure Outcome Variables Carefully**:
+#>    Clearly define what you mean by "effect" in the context of fertilizers (e.g., yield, plant height, color intensity). Develop a detailed protocol for how these measures will be taken, ideally using reliable and precise instruments or methods to accurately attribute any differences observed across treatment groups.
 #> 
-#> 8. **Data Analysis Methods Accounting for Complex Structure:**
-#>    - The nested (or hierarchical) structure means the data's variance might differ in levels of granularity within the experiment. Thus, adopting more robust analytical techniques such as mixed-effect models, generalized least squares regression, or even machine learning algorithms with appropriate validation will help correctly interpreting relationships between variables considering this complex structure.
+#> 7. **Consider an Experimental Design Other Than Mapped Treatments**:
+#>    Think about employing a randomized complete block design (RCBD), split plots, replicated nested, latin square designs if your treatments, blocks, replicates etc., are different in character. The standard mapping of the experiment as shown here is straightforward for comparison but does not optimize yields with factors having high variance.
 #> 
-#> Implementing these considerations would strengthen the study's validity and allow for a comprehensive comparison between treatments based on multiple factors, offering deeper insights into soil fertility under different management scenarios.
+#> 8. **Document and Consider Ethics**:
+#>    Document and consider any potential risks when carrying out agricultural/field experiments (e.g., pesticide use, safety around agricultural equipment). This would involve obtaining necessary permissions and conducting your study in compliance with all regulatory stipulations and scientific ethics guidelines.
+#> 
+#> By addressing these suggestions, the experiment can be made more robust scientifically to yield meaningful improvements on how different fertilizers affect a specified system.
 ```
 
 Context-aware simulation
@@ -190,15 +193,22 @@ autosim_rcrds(des)
 #>      mainplot    subplot fertilizer irrigation biomass yield quality_score  .sim
 #>       <U(30)>   <U(120)>     <T(3)>     <T(2)>                                  
 #>         <chr>      <chr>      <chr>      <chr> <fct>   <int> <fct>         <int>
-#>  1 mainplot01 subplot001          A irrigatio… low       177 Poor              1
-#>  2 mainplot01 subplot002          A irrigatio… low         0 Poor              1
-#>  3 mainplot01 subplot003          A irrigatio… low       185 Good              1
-#>  4 mainplot01 subplot004          A irrigatio… low       190 Good              1
-#>  5 mainplot02 subplot005          C irrigatio… medium    701 Fair              1
-#>  6 mainplot02 subplot006          C irrigatio… medium    745 Fair              1
-#>  7 mainplot02 subplot007          C irrigatio… medium    734 Fair              1
-#>  8 mainplot02 subplot008          C irrigatio… medium    750 Fair              1
-#>  9 mainplot03 subplot009          C irrigatio… high      918 Fair              1
-#> 10 mainplot03 subplot010          C irrigatio… high      644 Fair              1
+#>  1 mainplot01 subplot001          A irrigatio… low       221 very_low          1
+#>  2 mainplot01 subplot002          A irrigatio… low        NA very_low          1
+#>  3 mainplot01 subplot003          A irrigatio… low       231 medium            1
+#>  4 mainplot01 subplot004          A irrigatio… low       237 medium            1
+#>  5 mainplot02 subplot005          C irrigatio… medium    876 low               1
+#>  6 mainplot02 subplot006          C irrigatio… medium    931 low               1
+#>  7 mainplot02 subplot007          C irrigatio… medium    917 low               1
+#>  8 mainplot02 subplot008          C irrigatio… medium    937 low               1
+#>  9 mainplot03 subplot009          C irrigatio… high     1147 low               1
+#> 10 mainplot03 subplot010          C irrigatio… high      805 low               1
 #> # ℹ 110 more rows
 ```
+
+## Naming credit
+
+The name `souschef` was inspired by Francis Hui from the idea of a sous
+chef in the kitchen. The sous-chef is a chef who is second-in-command in
+a kitchen. This is a metaphor for the role of the package in assisting
+the user in the design of experiments.

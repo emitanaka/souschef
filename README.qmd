@@ -91,4 +91,15 @@ autosim_rcrds(des)
 ```
 
 
+## Naming credit
+
+The name `souschef` was inspired by Francis Hui from the idea of a sous chef in the kitchen. 
+The sous-chef is a chef who is second-in-command in a kitchen. 
+This is a metaphor for the role of the package in assisting the user in the design of experiments. 
+
+
+
+
+
+
 
